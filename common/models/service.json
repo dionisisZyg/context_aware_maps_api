@@ -1,0 +1,102 @@
+{
+  "name": "service",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "routeReward"
+    }
+  ],
+  "methods": {
+    "routeReward": {
+      "accepts": [
+        {
+          "arg": "models",
+          "type": "object",
+          "required": true,
+          "description": "the passed transaction models",
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "routeId",
+          "type": "number",
+          "required": true,
+          "description": "the route id",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "points",
+          "type": "number",
+          "root": true,
+          "description": "the points that should be awarded"
+        }
+      ],
+      "description": "calculates the reward for the given route",
+      "http": [
+        {
+          "path": "/routeReward",
+          "verb": "get"
+        }
+      ]
+    },
+    "reviewReward": {
+      "accepts": [
+        {
+          "arg": "models",
+          "type": "object",
+          "required": true,
+          "description": "the passed transaction models",
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "reviewId",
+          "type": "number",
+          "required": true,
+          "description": "the id of the review that the reward wil be based on",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "points",
+          "type": "number",
+          "root": true,
+          "description": "the points to reward"
+        }
+      ],
+      "description": "reward based on route review",
+      "http": [
+        {
+          "path": "/reviewReward",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "name": "point",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+    "latitude": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 11,
+      "scale": 8
+    },
+    "longitude": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 11,
+      "scale": 8
+    },
+    "timestamp": {
+      "type": "date",
+      "dataType": "timestamp"
+    },
+    "accuracy": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 9,
+      "scale": 5
+    },
+    "speed": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 9,
+      "scale": 5
+    },
+    "altitude": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 9,
+      "scale": 5
+    },
+    "altitudeAccuracy": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 9,
+      "scale": 5
+    },
+    "heading": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 9,
+      "scale": 5
+    },
+    "routeId": {
+      "type": "number"
+    },
+    "typeId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "type": {
+      "type": "belongsTo",
+      "model": "type",
+      "foreignKey": "typeId"
+    },
+    "route": {
+      "type": "belongsTo",
+      "model": "route",
+      "foreignKey": "routeId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

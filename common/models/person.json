@@ -1,0 +1,81 @@
+{
+  "name": "person",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+    "points": {
+      "type": "number",
+      "default": 0,
+      "dataType": "decimal",
+      "precision": 8,
+      "scale": 2
+    }
+  },
+  "validations": [],
+  "relations": {
+    "routes": {
+      "type": "hasMany",
+      "model": "route",
+      "foreignKey": "personId"
+    },
+    "routeReviews": {
+      "type": "hasMany",
+      "model": "route",
+      "foreignKey": "personId",
+      "through": "review"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "findLeaderBoard"
+    }
+  ],
+  "methods": {
+    "findLeaderBoard": {
+      "accepts": [
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": false,
+          "description": "how many records should be returned",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "persons",
+          "type": "array",
+          "root": true,
+          "description": "the persons leaderboard"
+        }
+      ],
+      "description": "find the leaderboard",
+      "http": [
+        {
+          "path": "/leaderboard",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

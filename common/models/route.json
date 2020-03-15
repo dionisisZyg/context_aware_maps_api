@@ -1,0 +1,453 @@
+{
+  "name": "route",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+    "personId": {
+      "type": "number"
+    },
+    "isDuringDay": {
+      "type": "boolean"
+    },
+    "creationDate": {
+      "type": "date"
+    },
+    "weatherTypeCode": {
+      "type": "string"
+    },
+    "typeCode": {
+      "type": "string"
+    },
+    "purposeCode": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "person": {
+      "type": "belongsTo",
+      "model": "person",
+      "foreignKey": "personId"
+    },
+    "reviewers": {
+      "type": "hasMany",
+      "model": "person",
+      "foreignKey": "routeId",
+      "through": "review"
+    },
+    "points": {
+      "type": "hasMany",
+      "model": "point",
+      "foreignKey": "routeId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "createRouteCollection"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "customFind"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "findRouteWeatherTypes"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "findRoutePurposes"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "findRouteTypes"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "findById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "geoJsonFormat"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "ggrs87Format"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "convertGeoJSONToGgrs87Format"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "graphToGeoJSON"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "getDirectionsToGeoJSON"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "statistics"
+    }
+  ],
+  "methods": {
+    "createRouteCollection": {
+      "accepts": [
+        {
+          "arg": "routes",
+          "type": "array",
+          "required": true,
+          "description": "the route records",
+          "http": {
+            "source": "body"
+          }
+        },
+        {
+          "arg": "req",
+          "description": "the express http request object",
+          "type": "object",
+          "http": {
+            "source": "req"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "routes",
+          "type": "array",
+          "root": true,
+          "description": "the created routes"
+        }
+      ],
+      "description": "creates many routes records",
+      "http": [
+        {
+          "path": "/collection",
+          "verb": "post"
+        }
+      ]
+    },
+    "customFind": {
+      "accepts": [
+        {
+          "arg": "filter",
+          "type": "object",
+          "required": false,
+          "description": "the filter object",
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "req",
+          "description": "the express http request object",
+          "type": "object",
+          "http": {
+            "source": "req"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "routes",
+          "type": "array",
+          "root": true,
+          "description": "the routes"
+        }
+      ],
+      "description": "custom find",
+      "http": [
+        {
+          "path": "/",
+          "verb": "get"
+        }
+      ]
+    },
+    "findRouteWeatherTypes": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "weatherTypes",
+          "type": "array",
+          "root": true,
+          "description": "the weather types"
+        }
+      ],
+      "description": "route weather types",
+      "http": [
+        {
+          "path": "/weatherTypes",
+          "verb": "get"
+        }
+      ]
+    },
+    "findRoutePurposes": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "purposes",
+          "type": "array",
+          "root": true,
+          "description": "the route purposes"
+        }
+      ],
+      "description": "route purposes",
+      "http": [
+        {
+          "path": "/purpose",
+          "verb": "get"
+        }
+      ]
+    },
+    "findRouteTypes": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "types",
+          "type": "array",
+          "root": true,
+          "description": "the route types"
+        }
+      ],
+      "description": "route types",
+      "http": [
+        {
+          "path": "/types",
+          "verb": "get"
+        }
+      ]
+    },
+    "geoJsonFormat": {
+      "accepts": [
+        {
+          "arg": "filter",
+          "type": "object",
+          "required": false,
+          "description": "the filter object",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "geoJson",
+          "type": "object",
+          "root": true,
+          "description": "the geojson"
+        }
+      ],
+      "description": "returns all the routes in geoJSON format",
+      "http": [
+        {
+          "path": "/geoJsonFormat",
+          "verb": "get"
+        }
+      ]
+    },
+    "ggrs87Format": {
+      "accepts": [
+        {
+          "arg": "filter",
+          "type": "object",
+          "required": false,
+          "description": "the filter object",
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "res",
+          "type": "object",
+          "http": {
+            "source": "res"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "data",
+          "type": "object",
+          "root": true,
+          "description": "the returned data"
+        }
+      ],
+      "description": "transforms data to ggrs87 format",
+      "http": [
+        {
+          "path": "/ggrs87Format",
+          "verb": "get"
+        }
+      ]
+    },
+    "convertGeoJSONToGgrs87Format": {
+      "accepts": [
+        {
+          "arg": "geojsonData",
+          "type": "object",
+          "required": true,
+          "description": "",
+          "http": {
+            "source": "body"
+          }
+        },
+        {
+          "arg": "res",
+          "type": "object",
+          "http": {
+            "source": "res"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "zip",
+          "type": "buffer",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/convertGeoJSONToGgrs87Format",
+          "verb": "post"
+        }
+      ]
+    },
+    "graphToGeoJSON": {
+      "accepts": [
+        {
+          "arg": "graph",
+          "type": "object",
+          "required": true,
+          "description": "",
+          "http": {
+            "source": "body"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "geojson",
+          "type": "string",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/graphToGeoJSON",
+          "verb": "post"
+        }
+      ]
+    },
+    "getDirectionsToGeoJSON": {
+      "accepts": [
+        {
+          "arg": "key",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "filter",
+          "type": "object",
+          "required": false,
+          "description": "the filter object",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "directions",
+          "type": "string",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/getDirectionsToGeoJSON",
+          "verb": "get"
+        }
+      ]
+    },
+    "statistics": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "statistics",
+          "type": "object",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/statistics",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

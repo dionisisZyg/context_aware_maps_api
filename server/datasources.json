@@ -1,0 +1,18 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mysql": {
+    "host": "${MYSQL_HOST}",
+    "port": "${MYSQL_PORT}",
+    "url": "",
+    "database": "ctxmaps",
+    "password": "${MYSQL_PASSWORD}",
+    "name": "mysql",
+    "user": "${MYSQL_USER}",
+    "connector": "mysql",
+    "connectTimeout": 30000,
+    "acquireTimeout": 30000
+  }
+}
